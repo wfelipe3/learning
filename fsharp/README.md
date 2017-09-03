@@ -19,7 +19,7 @@ These are the commands to run projects in dotnet
 3. Run tests `dotnet test`
 4. To add a nugget reference use the command `dotnet add package <package> --version <version>` example `dotnet add package FsUnit.xUnit --version 3.0.0`
 
-#Unit testing
+## Unit testing
 
 There is a library to create more f# idiomatic tests, the project can be found in http://fsprojects.github.io/FsUnit/
 
