@@ -16,7 +16,7 @@ These are the commands to run projects in dotnet
 
 1. Downlaod dependencies `dotnet restore`
 2. Run project `dotnet run`
-3. Run tests 'dotnet test`
+3. Run tests `dotnet test`
 4. To add a nugget reference use the command `dotnet add package <package> --version <version>` example `dotnet add package FsUnit.xUnit --version 3.0.0`
 
 #Unit testing
