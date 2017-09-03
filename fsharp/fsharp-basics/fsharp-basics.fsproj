@@ -7,6 +7,7 @@
     <Compile Include="Tests.fs" />
     <Compile Include="Test/FsTypes.fs" />
     <Compile Include="Test/Rpn.fs" />
+    <Compile Include="Test/Fundamentals.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
