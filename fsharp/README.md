@@ -2,6 +2,11 @@
 
 This is the main folder for f# learning projects
 
+## References
+
+1. https://fsharpforfunandprofit.com/
+2. http://fsharp.org/learn.html
+
 ## Create project
 
 to crate a f# project in mac there are two options
