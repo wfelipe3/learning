@@ -4,6 +4,7 @@ import org.scalatest.{FreeSpec, Matchers}
 import PrintableExercise._
 import PrintableExercise.PrintableInstances._
 import PrintableExercise.PrintableSyntax._
+import chapt01.CatInstance._
 
 /**
   * Created by feliperojas on 11/25/17.
@@ -16,13 +17,9 @@ class PrintableLearning extends FreeSpec with Matchers {
   }
 
   "printable for cats class" in {
-    final case class Cat(name: String, age: Int, color: String)
-
     implicit val catPrintable = new Printable[Cat] {
       override def format(a: Cat): String = s"${a.name} is a ${a.age} years old ${a.color} cat"
     }
-
-    val tobita = Cat("tobita", 10, "blue")
 
     Printable.format(tobita) should be("tobita is a 10 years old blue cat")
     tobita.format should be("tobita is a 10 years old blue cat")
