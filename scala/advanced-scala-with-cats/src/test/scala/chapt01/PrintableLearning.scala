@@ -19,13 +19,13 @@ class PrintableLearning extends FreeSpec with Matchers {
     final case class Cat(name: String, age: Int, color: String)
 
     implicit val catPrintable = new Printable[Cat] {
-      override def format(a: Cat): String = s"${a.name} is a ${a.age} years old ${a.color} tobita"
+      override def format(a: Cat): String = s"${a.name} is a ${a.age} years old ${a.color} cat"
     }
 
     val tobita = Cat("tobita", 10, "blue")
 
-    Printable.format(tobita) should be("tobita is a 10 years old blue tobita")
-    tobita.format should be("tobita is a 10 years old blue tobita")
+    Printable.format(tobita) should be("tobita is a 10 years old blue cat")
+    tobita.format should be("tobita is a 10 years old blue cat")
     tobita.print
 
   }
