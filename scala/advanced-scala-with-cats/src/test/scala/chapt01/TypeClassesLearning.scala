@@ -36,8 +36,18 @@ class TypeClassesLearning extends FreeSpec with Matchers {
   }
 
   object Json {
-    def toJson[A](a: A)(implicit jsonWriter: JsonWriter[A]): Json =
+    def toJson[A: JsonWriter](a: A): Json = {
+      val jsonWriter = implicitly[JsonWriter[A]]
       jsonWriter.write(a)
+    }
+  }
+
+  object JsonSyntax {
+
+    implicit class JsonWriterOps[A](value: A) {
+      def toJson(implicit w: JsonWriter[A]): Json = w.write(value)
+    }
+
   }
 
   "user json case class" in {
@@ -49,5 +59,16 @@ class TypeClassesLearning extends FreeSpec with Matchers {
       "name" -> JsString("felipe"),
       "email" -> JsString("mail@mail.com")
     )))
+  }
+
+  "use syntax notation" in {
+    import JsonWriteInstances._
+    import JsonSyntax._
+
+    Person("felipe", "mail@email.com").toJson should be(JsObject(Map(
+      "name" -> JsString("felipe"),
+      "email" -> JsString("mail@email.com")
+    )))
+
   }
 }
