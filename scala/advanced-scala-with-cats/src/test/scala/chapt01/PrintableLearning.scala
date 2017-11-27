@@ -24,7 +24,6 @@ class PrintableLearning extends FreeSpec with Matchers {
     Printable.format(tobita) should be("tobita is a 10 years old blue cat")
     tobita.format should be("tobita is a 10 years old blue cat")
     tobita.print
-
   }
 
 
