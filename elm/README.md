@@ -8,4 +8,6 @@ Learning material for elm language
 
 ## Commands
 
-1. elm-package install elm-lang/html -> create a project with html module
+1. elm-package install elm-lang/html -> adds a package module to a project
+2. elm-app create <folder> -> create a new elm project
+3. elm-test --watch -> run tests watching for file changes
