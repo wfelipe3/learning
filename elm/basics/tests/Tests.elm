@@ -201,10 +201,34 @@ all =
                                 toBool a = case a of
                                     Yes -> True
                                     No -> False
+                                    Other _ -> False
                             in
                                 toBool Yes |> Expect.equal True
+                    , test "sum type like function" <|
+                        \_ ->
+                            let
+                                value = Message "hello" 1
+                            in
+                                Message "hello" 1 |> Expect.equal value
+                    , test "sum type with function" <|
+                        \_ -> Message "hello" 1 |> showError |> Expect.equal "Error code: 1\"hello\""
+                    , test "alias types" <|
+                        \_ -> {id = 1, name = "felipe"} |> showPlayer |> Expect.equal "player name is felipe player id is 1"
+                    , test "alias types constructors" <|
+                        \_ -> Player 1 "felipe" |> showPlayer |> Expect.equal "player name is felipe player id is 1"
                 ]
        ] 
+
+type alias PlayerId = Int
+type alias PlayerName = String
+type alias Player =
+    {
+        id: PlayerId
+        , name: PlayerName
+    }
+
+showPlayer : Player -> String
+showPlayer p = "player name is " ++ (.name p) ++ " player id is " ++ toString (.id p)
 
 isNegative : Int -> Bool
 isNegative x = x < 0
@@ -215,5 +239,11 @@ overNineThousand x = if x > 9000 then "It is over nine thousand" else "meeehh"
 point = {x = 1, y = 2}
 
 type Gender = Male | Female
-type Answer = Yes | No
+type Answer = Yes | No | Other String 
 
+type Error a = Message a Int
+
+showError : Error a -> String
+showError e = 
+    case e of
+        Message a i -> "Error code: " ++ toString i ++ toString a
