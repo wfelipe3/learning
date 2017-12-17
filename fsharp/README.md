@@ -28,3 +28,8 @@ These are the commands to run projects in dotnet
 
 There is a library to create more f# idiomatic tests, the project can be found in http://fsprojects.github.io/FsUnit/
 
+## Watch mode
+1.  Add to fsharp-basics.fsproj
+ <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
+  </ItemGroup> 
