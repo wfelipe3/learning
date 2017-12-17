@@ -107,7 +107,69 @@ all =
                             value2 = {value | y = 5}
                         in
                             .y value2 |> Expect.equal 5
-
+            ]
+        , describe "pattern matching"
+            [ 
+                test "first pattern" <|
+                    \_ ->
+                        let
+                            toString x = 
+                                case x of
+                                    1 -> "one"
+                                    2 -> "two"
+                                    3 -> "three"
+                                    _ -> "many"
+                        in
+                            toString 1 |> Expect.equal "one"                         
+                , test "pattern match records" <|
+                    \_ ->
+                        let
+                            toString x =
+                                case x of
+                                    {x} -> "is " ++ x
+                        in
+                            toString {x = "test", y = 10} |> Expect.equal "is test"
+                , test "pattern match lists" <|
+                    \_ ->
+                        let
+                            getValue x =
+                                case x of 
+                                    [] -> "empty"
+                                    head :: _ -> "head is " ++ (toString head)
+                        in
+                            getValue [1, 2, 3] |> Expect.equal "head is 1" 
+                , test "pattern mathing for tuples" <|
+                    \_ ->
+                        let
+                            getValue x =
+                                case x of
+                                    (a,b,c) -> "a is " ++ (toString a) ++ " b is " ++ (toString b) ++ " c is " ++ (toString c)
+                        in
+                            getValue (1, True, "value") |> Expect.equal "a is 1 b is True c is \"value\""
+                , test "desctructuring record" <|
+                    \_ ->
+                        let
+                            {x, y} = point
+                            sum {x, y} = x + y
+                        in
+                            (toString x) ++ (toString y) ++ toString (sum point) |> Expect.equal "123"
+                , test "use alias when destructuring record" <|
+                    \_ ->
+                        let 
+                            value = {x = 1, y = 2, z = 3}
+                            doSomething ({x, y} as wholeRecord) = (toString x) ++ (toString y) ++ toString wholeRecord.z
+                        in
+                            doSomething value |> Expect.equal "123"
+                , test "pattern matching for sum types" <|
+                    \_ ->
+                        let
+                            showGender : Gender -> String
+                            showGender g = 
+                                case g of
+                                    Male -> "male"
+                                    Female -> "female"
+                        in
+                            showGender Male |> Expect.equal "male"
             ]
        ] 
 
@@ -116,3 +178,7 @@ isNegative x = x < 0
 
 overNineThousand : Int -> String
 overNineThousand x = if x > 9000 then "It is over nine thousand" else "meeehh"
+
+point = {x = 1, y = 2}
+
+type Gender = Male | Female
