@@ -36,6 +36,28 @@ all =
             [
                 test "function invokation" <| 
                     \_ -> (isNegative 10) |> Expect.equal False
+                , test "polymorfic" <|
+                    \_ ->
+                        let
+                            first : (a, b) -> a
+                            first (x, y) = x
+                        in
+                            first (True, "value") |> Expect.equal True
+                , test "hihger order functions" <|
+                    \_ ->
+                        let
+                            applyFive : (Int -> Int) -> Int
+                            applyFive f = f 5
+                        in
+                            applyFive (\i -> i + i) |> Expect.equal 10
+                , test "functions that returns function" <|
+                    \_ ->
+                        let
+                            isGreaterThan : Int -> (Int -> Bool)
+                            isGreaterThan i = \j -> j > i
+                            isGreaterThanTen = isGreaterThan 10
+                        in
+                           isGreaterThanTen 11 |> Expect.equal True 
             ]
         , describe "if"
             [
@@ -171,6 +193,17 @@ all =
                         in
                             showGender Male |> Expect.equal "male"
             ]
+            , describe "types"
+                [
+                    test "sum types" <|
+                        \_ ->
+                            let
+                                toBool a = case a of
+                                    Yes -> True
+                                    No -> False
+                            in
+                                toBool Yes |> Expect.equal True
+                ]
        ] 
 
 isNegative : Int -> Bool
@@ -182,3 +215,5 @@ overNineThousand x = if x > 9000 then "It is over nine thousand" else "meeehh"
 point = {x = 1, y = 2}
 
 type Gender = Male | Female
+type Answer = Yes | No
+
