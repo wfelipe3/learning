@@ -1,55 +1,42 @@
 module Main exposing (..)
 
-import Html exposing (Html, text, div, h1, img)
-import Html.Attributes exposing (src)
+import Html exposing (text)
 
 
----- MODEL ----
+question =
+    "why did the chicken cross the road?"
 
 
-type alias Model =
-    {}
+answer =
+    "To get to the other side"
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( {}, Cmd.none )
-
-
-
----- UPDATE ----
-
-
-type Msg
-    = NoOp
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    ( model, Cmd.none )
-
-
-
----- VIEW ----
-
-
-view : Model -> Html Msg
 view model =
-    div []
-        [ img [ src "/logo.svg" ] []
-        , h1 [] [ text "Your Elm App is working!" ]
-        ]
+    text model
 
 
+init =
+    "Question: "
+        ++ question
+        ++ " Answer: "
+        ++ answer
 
----- PROGRAM ----
+
+sum a b =
+    a + b
 
 
-main : Program Never Model Msg
+sumWithOne =
+    sum 1
+
+
+toUpperLambda =
+    \str -> String.toUpper str
+
+
 main =
-    Html.program
-        { view = view
-        , init = init
-        , update = update
-        , subscriptions = always Sub.none
-        }
+    init
+        ++ " "
+        ++ toString (sumWithOne 2)
+        |> toUpperLambda
+        |> view
