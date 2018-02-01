@@ -6,6 +6,8 @@ This is the main folder for f# learning projects
 
 1. https://fsharpforfunandprofit.com/
 2. http://fsharp.org/learn.html
+3. https://docs.microsoft.com/en-us/dotnet/fsharp/using-fsharp-on-azure/table-storage
+4. https://mikhail.io/2017/12/precompiled-azure-functions-in-fsharp/
 
 ## Create project
 
