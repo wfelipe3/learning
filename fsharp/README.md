@@ -6,6 +6,8 @@ This is the main folder for f# learning projects
 
 1. https://fsharpforfunandprofit.com/
 2. http://fsharp.org/learn.html
+3. https://docs.microsoft.com/en-us/dotnet/fsharp/using-fsharp-on-azure/table-storage
+4. https://mikhail.io/2017/12/precompiled-azure-functions-in-fsharp/
 
 ## Create project
 
@@ -28,3 +30,8 @@ These are the commands to run projects in dotnet
 
 There is a library to create more f# idiomatic tests, the project can be found in http://fsprojects.github.io/FsUnit/
 
+## Watch mode
+1.  Add to fsharp-basics.fsproj
+ <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
+  </ItemGroup> 
