@@ -1,42 +1,41 @@
 module Main exposing (..)
 
+import Array
 import Html exposing (text)
-
-
-question =
-    "why did the chicken cross the road?"
-
-
-answer =
-    "To get to the other side"
-
-
-view model =
-    text model
+import Set
 
 
 init =
-    "Question: "
-        ++ question
-        ++ " Answer: "
-        ++ answer
+    { question = "why did the chicken cross the road?"
+    , answer = "To get to the other side"
+    }
 
 
-sum a b =
-    a + b
+view model =
+    text
+        ("Question: "
+            ++ model.question
+            ++ " Answer: "
+            ++ .answer model
+        )
 
 
-sumWithOne =
-    sum 1
+list =
+    1 :: [ 2 ] ++ [ 3 ]
 
 
-toUpperLambda =
-    \str -> String.toUpper str
+transformList list =
+    list
+        |> List.map (\a -> a + 1)
+        |> List.map toString
+        |> String.join ", "
+
+
+set =
+    Set.fromList list
 
 
 main =
-    init
-        ++ " "
-        ++ toString (sumWithOne 2)
-        |> toUpperLambda
-        |> view
+    list
+        |> transformList
+        |> text

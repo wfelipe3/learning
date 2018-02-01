@@ -1,0 +1,13 @@
+{
+    "bindings": [
+        {
+            "type": "httpTrigger",
+            "methods": ["get"],
+            "authLevel": "anonymous",
+            "name": "req",
+            "route": "hellosanta"
+        }
+    ],
+    "scriptFile": "../bin/HelloFunctions.dll",
+    "entryPoint": "HelloFunctions.Say.run"
+}
