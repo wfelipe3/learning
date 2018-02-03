@@ -38,4 +38,21 @@ class CatsEqLearning extends FreeSpec with Matchers {
     catEq.eqv(tobita, Cat("garfield", 20, "orange"))
   }
 
+  "comparing more values with cats eq" in {
+    case class Dog(name: String, age: Int)
+    val dogEq = Eq.instance[Dog]((d1, d2) => d1.name == d2.name && d1.age == d2.age)
+
+    dogEq.eqv(Dog("Apache", 10), Dog("Apache", 10)) should be(true)
+    dogEq.eqv(Dog("Apache", 20), Dog("Apache", 10)) should be(false)
+    dogEq.eqv(Dog("Apache", 10), Dog("Dakota", 10)) should be(false)
+
+    val stringDogEq = dogEq.on[String] { s =>
+      val values = s.split(" ")
+      Dog(values(0), values(1).toInt)
+    }
+
+    stringDogEq.eqv("apache 10", "apache 10") should be(true)
+    stringDogEq.eqv("apache 10", "apache 20") should be(false)
+  }
+
 }
