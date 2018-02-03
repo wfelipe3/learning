@@ -59,6 +59,11 @@ class MonoidLearning extends FreeSpec with Matchers {
     (m.combine(x, m.empty) == x && m.combine(m.empty, x) == x) should be(true)
   }
 
+  def add[A: Monoid](items: List[A]): A = {
+    val monoid = implicitly[Monoid[A]]
+    items.foldRight(monoid.empty)(monoid.combine)
+  }
+
   "Monoid laws" in {
     import MonoidInstnaces._
     associativeLaw(10, 20, 30)
@@ -93,12 +98,22 @@ class MonoidLearning extends FreeSpec with Matchers {
   }
 
   "implement add items with monoid" in {
-    def add[A: Monoid](items: List[A]): A = {
-      val monoid = implicitly[Monoid[A]]
-      items.foldRight(monoid.empty)(monoid.combine)
-    }
-
     add(List(1, 2, 3)) should be(1 + 2 + 3)
     add(List[Option[Int]](Some(1), Some(2), Some(3))) should be(Some(1 + 2 + 3))
+  }
+
+  "implement add with cost case class" in {
+    case class Cost(totalCost: Double, quantity: Double)
+    implicit val costM = new Monoid[Cost] {
+      override def empty: Cost = Cost(0, 0)
+
+      override def combine(x: Cost, y: Cost): Cost =
+        Cost(
+          x.totalCost + y.totalCost,
+          x.quantity + y.quantity
+        )
+    }
+
+    add(List(Cost(1, 2), Cost(2, 3))) should be(Cost(3, 5))
   }
 }
