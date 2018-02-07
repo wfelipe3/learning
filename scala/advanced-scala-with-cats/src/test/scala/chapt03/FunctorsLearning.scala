@@ -21,6 +21,17 @@ class FunctorsLearning extends FreeSpec with Matchers {
     def map[A, B](func: F[A])(f: A => B): F[B]
   }
 
+  object LearningFunctor {
+    def apply[F[_]](implicit learnigFunctor: LearnigFunctor[F]) =
+      learnigFunctor
+  }
+
+  object FunctorInstances {
+    implicit val optionFunctor = new LearnigFunctor[Option] {
+      def map[A, B](func: Option[A])(f: A => B) = func.map(f)
+    }
+  }
+
   "functors have map function that convert values of the converter from one type to another" in {
     List(1, 2, 3, 4).map(_ % 2 == 0) should be(List(false, true, false, true))
     List(1, 2, 3).map(_ * 2).map(_ + 4) should be(List(1 * 2 + 4, 2 * 2 + 4, 3 * 2 + 4))
@@ -45,10 +56,8 @@ class FunctorsLearning extends FreeSpec with Matchers {
   }
 
   "Functor implementation" in {
-    val func = new LearnigFunctor[Option] {
-      def map[A, B](func: Option[A])(f: A => B) = func.map(f)
-    }
-
+    import FunctorInstances._
+    val func = LearningFunctor.apply[Option]
     func.map(Some(0))(_ + 1) should be(Some(1))
   }
 
