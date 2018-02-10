@@ -205,7 +205,7 @@ class FunctorsLearning extends FreeSpec with Matchers {
     implicit val intCodec = new Codec[Int] {
       override def encode(value: Int): String = value.toString
 
-      override def decode(value: String): Option[Int] = Try(value.toInt).map(i => Some(i)).getOrElse(None)
+      override def decode(value: String): Option[Int] = Try(value.toInt).toOption
     }
 
     encode(10) should be("10")
