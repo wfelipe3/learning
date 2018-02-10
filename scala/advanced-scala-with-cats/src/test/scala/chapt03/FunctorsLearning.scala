@@ -17,17 +17,26 @@ import cats.syntax.functor._
   */
 class FunctorsLearning extends FreeSpec with Matchers {
 
-  trait LearnigFunctor[F[_]] {
+  trait LearningFunctor[F[_]] {
     def map[A, B](func: F[A])(f: A => B): F[B]
   }
 
   object LearningFunctor {
-    def apply[F[_]](implicit learnigFunctor: LearnigFunctor[F]) =
+    def apply[F[_]](implicit learnigFunctor: LearningFunctor[F]) =
       learnigFunctor
   }
 
+  object LearningFunctorsSyntax {
+
+    implicit class FunctorOps[F[_], A](value: F[A]) {
+      def mapLearn[B](f: A => B)(implicit functor: LearningFunctor[F]) =
+        functor.map(value)(f)
+    }
+
+  }
+
   object FunctorInstances {
-    implicit val optionFunctor = new LearnigFunctor[Option] {
+    implicit val optionFunctor = new LearningFunctor[Option] {
       def map[A, B](func: Option[A])(f: A => B) = func.map(f)
     }
   }
