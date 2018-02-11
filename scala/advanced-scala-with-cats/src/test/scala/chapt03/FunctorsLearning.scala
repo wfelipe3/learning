@@ -66,6 +66,8 @@ class FunctorsLearning extends FreeSpec with Matchers {
 
   def format[A](value: A)(implicit p: Printable[A]): String = p.format(value)
 
+  case class Box[A](value: A)
+
   "functors have map function that convert values of the converter from one type to another" in {
     List(1, 2, 3, 4).map(_ % 2 == 0) should be(List(false, true, false, true))
     List(1, 2, 3).map(_ * 2).map(_ + 4) should be(List(1 * 2 + 4, 2 * 2 + 4, 3 * 2 + 4))
@@ -168,7 +170,6 @@ class FunctorsLearning extends FreeSpec with Matchers {
 
   "Printable for box" in {
     import PrintableInstances._
-    case class Box[A](value: A)
 
     implicit def boxPrintable[A](implicit ap: Printable[A]) = new Printable[Box[A]] {
       override def format(value: Box[A]): String = s"Box(${ap.format(value.value)})"
@@ -214,7 +215,23 @@ class FunctorsLearning extends FreeSpec with Matchers {
     implicit val intListCodec = intCodec.imap[List[Int]](dec = List(_), enc = _.head)
 
     encode(List(10, 20)) should be("10")
-    decode("10")(intListCodec) should be (Some(List(10)))
+    decode("10")(intListCodec) should be(Some(List(10)))
+
+    implicit def boxCodec[A](implicit codec: Codec[A]) = new Codec[Box[A]] {
+      override def encode(value: Box[A]): String = s"Box(${codec.encode(value.value)})"
+
+      override def decode(value: String): Option[Box[A]] = {
+        if (value.startsWith("Box(") && value.endsWith(")"))
+          codec.decode(value.replaceFirst("Box\\(", "").init)
+            .map(Box(_))
+        else
+          None
+      }
+    }
+
+    encode(Box(10)) should be("Box(10)")
+    decode("Box(60)")(boxCodec(intCodec)) should be(Some(Box(60)))
+    decode("test")(boxCodec(intCodec)) should be(None)
   }
 
 }
