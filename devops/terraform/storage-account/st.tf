@@ -61,3 +61,7 @@ resource "azurerm_storage_blob" "st" {
     type = "block"
     source = "${var.file}"
 }
+
+output "url" {
+    value = "${azurerm_storage_blob.st.url}"
+}
