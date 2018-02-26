@@ -134,7 +134,10 @@ resource "azurerm_virtual_machine_extension" "vm" {
     type_handler_version = "1.9"
     settings = <<SETTINGS
         {
-            "commandToExecute": "powershell.exe \"iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))\nchoco install googlechrome -y\""
+            "fileUris": [
+                "https://scriptsstaccount.blob.core.windows.net/scripts/install.ps1"
+            ],
+            "commandToExecute": "powershell.exe -File install.ps1"
         }
     SETTINGS
 }
