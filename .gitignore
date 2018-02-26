@@ -266,7 +266,7 @@ gradle-app.setting
 *.tfstate.backup
 
 # Module directory
-.terraform/
+**/.terraform/
 
 ### Terraform Patch ###
 *.tfvars
