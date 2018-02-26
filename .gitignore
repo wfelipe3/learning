@@ -260,4 +260,16 @@ gradle-app.setting
  # auto-generated tag files
  tags
 
+### Terraform ###
+# Compiled files
+*.tfstate
+*.tfstate.backup
+
+# Module directory
+**/.terraform/
+.terraform/
+
+### Terraform Patch ###
+*.tfvars
+
  # End of https://www.gitignore.io/api/elm,vim
