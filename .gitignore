@@ -267,6 +267,7 @@ gradle-app.setting
 
 # Module directory
 **/.terraform/
+.terraform/
 
 ### Terraform Patch ###
 *.tfvars
