@@ -1,0 +1,61 @@
+{
+  "builders": [{
+    "type": "azure-arm",
+
+    "client_id": "c65ff9e0-bb06-4294-81e8-be5cdb1f9fb1",
+    "client_secret": "F7Pa9hwNnimOtVKK3p4hfUk1WK2yp/2N9DMlv5HUStI=",
+    "tenant_id": "96973449-0a60-448a-b1ad-3c7237cd6563",
+    "subscription_id": "d3d6084b-d7fd-4800-92d8-7d24332fb61e",
+    "object_id": "927338ca-1353-4ca2-a2cd-15cb9f86d8e1",
+
+    "managed_image_resource_group_name": "packer-test",
+    "managed_image_name": "myPackerImage",
+
+    "os_type": "Windows",
+    "image_publisher": "MicrosoftWindowsServer",
+    "image_offer": "WindowsServer",
+    "image_sku": "2016-Datacenter",
+
+    "communicator": "winrm",
+    "winrm_use_ssl": "true",
+    "winrm_insecure": "true",
+    "winrm_timeout": "3m",
+    "winrm_username": "packer",
+
+    "azure_tags": {
+        "dept": "Engineering",
+        "task": "Image deployment"
+    },
+
+    "location": "East US",
+    "vm_size": "Standard_DS2_v2"
+  }],
+  "provisioners": [
+    {
+        "type": "powershell",
+        "inline": [
+            "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))"
+        ]
+    },
+    {
+        "type": "powershell",
+        "inline": [
+            "choco install googlechrome -y"
+        ]
+    },
+    {
+        "type": "powershell",
+        "inline": [
+            "choco install jdk8 -y"
+        ]
+    },
+    {
+        "type": "powershell",
+        "inline": [
+            "Add-WindowsFeature Web-Server",
+            "if( Test-Path $Env:SystemRoot\\windows\\system32\\Sysprep\\unattend.xml ){ rm $Env:SystemRoot\\windows\\system32\\Sysprep\\unattend.xml -Force}",
+            "& $Env:SystemRoot\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /shutdown /quiet"
+        ]
+    }
+  ]
+}
