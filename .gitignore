@@ -272,4 +272,10 @@ gradle-app.setting
 ### Terraform Patch ###
 *.tfvars
 
+### Vagrant ###
+**/.vagrant/
+*.box
+**/*.box
+#
+
  # End of https://www.gitignore.io/api/elm,vim
