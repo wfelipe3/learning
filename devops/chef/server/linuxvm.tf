@@ -161,11 +161,15 @@ resource "null_resource" "test" {
       server_name = "${azurerm_public_ip.test.fqdn}"
       api_fqdn = server_name
       bookshelf['vip'] = server_name
+      bookshelf['api_fqdn'] = server_name
+      bookshelf['web_ui_fqdn'] = server_name
       nginx['url'] = "https://#{server_name}"
       nginx['server_name'] = server_name
       #nginx['ssl_certificate'] = "/var/opt/chef-server/nginx/ca/#{server_name}.crt"
       #nginx['ssl_certificate_key'] = "/var/opt/chef-server/nginx/ca/#{server_name}.key"
       lb['fqdn'] = server_name
+      lb['api_fqdn'] = server_name
+      lb['web_ui_fqdn'] = server_name
     CHEFSERVERFILE
     destination = "/home/chefserver/chef-server.rb"
 
@@ -182,8 +186,6 @@ resource "null_resource" "test" {
       "echo '${azurerm_public_ip.test.ip_address} ${azurerm_public_ip.test.fqdn} ${var.name}' | sudo tee -a /etc/hosts",
       "echo $(ifconfig eth0 | grep 'inet ' | awk -F'[: ]+' '{ print $4 }') ${azurerm_public_ip.test.fqdn} ${var.name} | sudo tee -a /etc/hosts",
       "sudo cp /home/chefserver/chef-server.rb /etc/opscode/chef-server.rb",
-      "sudo mkdir -p /etc/chef-server",
-      "sudo cp /home/chefserver/chef-server.rb /etc/chef-server/chef-server.rb",
       "sudo chef-server-ctl reconfigure"
     ]
 
