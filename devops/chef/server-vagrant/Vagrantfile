@@ -1,0 +1,18 @@
+VAGRANTFILE_API_VERSION = "2"
+
+$script = <<SCRIPT
+wget -P /tmp https://packages.chef.io/files/stable/chef-server/12.17.33/ubuntu/14.04/chef-server-core_12.17.33-1_amd64.deb
+sudo dpkg -i /tmp/chef-server-core_12.17.33-1_amd64.deb
+sudo rm /tmp/chef-server-core_12.17.33-1_amd64.deb 
+sudo chef-server-ctl reconfigure
+sudo chef-server-ctl install chef-manage
+sudo chef-manage-ctl reconfigure
+SCRIPT
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    config.vm.box = "ubuntu/trusty64"
+    config.vm.network "private_network", type: "dhcp"
+    config.vm.hostname = "chefserver"
+
+    config.vm.provision "shell", inline: $script
+end
