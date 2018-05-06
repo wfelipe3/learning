@@ -8,6 +8,8 @@ let inputPoints =
 
 [<EntryPoint>]
 let main argv =
-    printf "%A" inputPoints
-    printf "%A" inputPoints
+    let p1 = Console.ReadLine()
+    let p2 = Console.ReadLine()
+    printf "%s" p1
+    printf "%s" p2
     0 // return an integer exit code
