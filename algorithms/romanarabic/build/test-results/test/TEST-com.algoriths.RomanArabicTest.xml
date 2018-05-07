@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.algoriths.RomanArabicTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-05-06T17:44:38" hostname="DESKTOP-6BL3GM8" time="0.097">
-  <properties/>
-  <testcase name="testOneFromArabicToRoman" classname="com.algoriths.RomanArabicTest" time="0.097"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
