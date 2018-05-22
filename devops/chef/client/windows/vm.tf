@@ -16,6 +16,10 @@ variable credential {
     description = "Azure app credential to create resources"
 }
 
+variable chef {
+    type = "map"
+}
+
 provider "azurerm" {
     subscription_id = "${var.credential["subscription_id"]}"
     client_id       = "${var.credential["client_id"]}"
@@ -115,7 +119,14 @@ resource "azurerm_virtual_machine" "vm" {
     }
 }
 
-resource "azurerm_virtual_machine_extension" "vm" {
+output "fqdn" {
+    value = "${azurerm_public_ip.vm.fqdn}"
+}
+output "name" {
+    value = "${azurerm_virtual_machine.vm.name}"
+}
+
+/*resource "azurerm_virtual_machine_extension" "vm" {
     name = "chefclient"
     location = "${var.location}"
     resource_group_name = "${azurerm_resource_group.vm.name}"
@@ -127,13 +138,13 @@ resource "azurerm_virtual_machine_extension" "vm" {
         {
             "client_rb": "ssl_verify_mode :verify_none",
             "bootstrap_options": {
-                "chef_node_name": "testnode1",
-                "chef_server_url": "https://bizchefserver.eastus.cloudapp.azure.com/organizations/bizdevopstest",
-                "validation_client_name": "bizdevopstest-validator"
+                "chef_node_name": "${var.chef["chef_node_name"]}",
+                "chef_server_url": "${var.chef["chef_server_url"]}",
+                "validation_client_name": "${var.chef["validation_client_name"]}"
             },
-            "runlist": "recipe[helloworld]",
+            "runlist": "${var.chef["run_list"]}",
             "validation_key_format": "plaintext",
-            "chef_daemon_interval": "1",
+            "chef_daemon_interval": "${var.chef["chef_deamon_interval"]}",
             "daemon": "service",
             "hints": {
                 "public_fqdn": "${azurerm_public_ip.vm.fqdn}",
@@ -143,7 +154,8 @@ resource "azurerm_virtual_machine_extension" "vm" {
     SETTINGS
     protected_settings = <<SETTINGS
         {
-            "validation_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEAuOsqDyZMObFx4yeJp2DHDap+uoe+mBTtt/tj8Kc2bg/0SoNt\n4hpsM7GKmu0dKAKdA5Rb07I9Ua+SqEFbWHPQ1tRbvHkXn0kUNvxebtBbeHZnZjSM\nV2zjLX2Gwgea6B47602PgpMnFh+4xK6rx/jJWRCVxiKuCQ7BOAHJZ2V7WSLfrwP6\noRvWw/LpsZJQWARUA/qohtyqCG4R8pFk6x5/FY2RDy382CAtKro+i8/vI7E5XHKH\nFRgydRV2IcmswOWud/z/HR05Mg45DsfQrI/Fj/J9SIYYtpgFIPEUAMHcF6rBBoKK\no0e/c23bqGF/n/BcfStWM+JXooUzF9Dpb1U3tQIDAQABAoIBAFdCsbBAdEvtTj7R\nE4YmhwgN4ouHLwt5JMxjFsAjR+4cHT1kU+AUc+bY6v080ztkME/WHJcDTyhS37QC\nU2akEHKv9zIzOlByHdXstWs5a1CnHxf9yBQhT/rRd1vsVs8eJUxeZ1BIvHMWOQyn\nGGzfG7SpvOOozdN8YPVa8n2WR+TBYKu/+I5cqNjsTPv1jocOoneF/RtKwiY5MFJm\noEMiV8k3U2CSaKqfYo3yvWKDkr7Aq3TTGwUaZyAV7ltixf3uB3OfE4Tx3DJlgJmi\nYfGi58Z1ZEIq4Kr+IBqG9O/AYR4G0oZ/uCn7OzAmtf1dxXNqg6jcRqeNa+EztEge\nB2FOtukCgYEA4dipDUWQyMcfBQuGLYjFQ5y8r6hnlNUEnsueNEVWzU8oVRwcpKUx\njdjtpGqHdj7y5aGGuu+vxPA4xYOGF2OzbKM08kOg1BVcvW9owxmAt9PAs2cF2cqD\nrOXxMupalxY7bUhepi+Hi2B7dGDEFo2d43ohCWZKDhWnHSmpbQJG5gsCgYEA0Zuc\nRREQ2O4iIsvfYcx40GoV/Ctkf6l+BiL4AJJr5v0NkS3Gnl6r9aVtepTEcnNgDra+\nkZZKA2BuT0sQAE7Gs0G/EU2Hk79J74Tsfc4W1vUvmOm0AiXAtoaqp7ueLW1P3ee+\nFhJomQkUn2+VCwaRZE5Rvdzw+wnIiNP17C6fsT8CgYALE2MHAZheIFXHG4+TABgc\nfr1KKAocZG37k6TIj3X4T598vQoykN9jQ3Y0D/1gsSmcVVWUKVkHYXiHRzH2R69u\n7noUP3jNrdaEe8g5eTC00y+qHK1Oxv26JvSzOIcEzdRQQbJSmBYfobWsOWqkaIGL\nvFuOaHPNSQaPCZIDhI8RjQKBgQCVUQLreJLF1i3fF9iTtLND1K7AqrC2+Kjb+kEt\nNyFCtXXau/9Hhi19mlD5B81Bssr08F2lHKiw6xrpxZEqhvOpcuaHjvFL4PLse4Z0\nwEEo9BTqG2GuPfKglCIxxseRmNNSQun4kziL/BoC0dwctJsSF3DHjgLk8j02q7f+\nfeAoxQKBgF5bHS4tLiZpFb0+ENkOKFHmJ3icnoU78sBqlEy9j4CvEC1Q4v1stEih\nu8NOF90NCDPX0PgZtr6xrHfPfSmPoI9gfQ50QEBUN2FHpUoYZXroSlk4iQfFBjDg\nthftyl9AtyH4+7UpTbczOlwG8CDB/TjKr/tVq19scqF7bD+lqQa0\n-----END RSA PRIVATE KEY-----"
+            "validation_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEAubst0oTYBQN2bGD9LTadDOv6cmO1jPnQV5srGpDhupZF6iBr\n8bjW60zQUrR6PZHAKoUXAVujln2yr9sDwrDtlyZaruxzQX7H51UHPsHQ77BGXTDn\nL2qY7Sd0HkJcx2sKKE7KtgXajwxHUDmz6SjuatF9IH2/JMK39fodKbkWHGnuqKq8\nsyaqDU4a2AEPrYWbnI/0sj9yjkV8MgYtOTMZluaeHM/LRdTywN6cqgpR0G+k1xxs\nJ7I/wX/zZsrsxBdAUySuvtpZoL9qmOPMrYHPO0XS6kdfP41zl7exZstr6kBKyPN7\njI0G4xgQKrDjLQxeiOM33+zEgGgtoCox12PITwIDAQABAoIBAH8h/Q+pFyT3Zcxx\n51tXktERhnFehxtktJQDBtI8cgcCbgEBCGKBn7uY7NBv8WzLo7p3N3QagjO0/ucZ\nB83wxfE8s74g5BPk8HkM3tS6XoZzJvcLTnRKhztuUjGUQ2XNgzpsFJ3cC+r3AKmN\nlfT3q5s6omfnKzvCfaHF/shchSIUxO2+z+AaoLWZuqO5JSgWqWRyAoyE0WzhI7ET\n8PqANoSe+adqGXwAR/SRYJn0z1IZwt+2ARWxI7ZmNvD/skgVlIcSPO3atAH6iEKe\nop9fg/5njBHOZaWZReTO59dTvC0JgqU3aqDnVCAmSKjzBWPBHXpa94l1XMzM66JV\ntA6bvkECgYEA8JbD/37XeRQSQJ1L4l/L/1IEHEVotnaqx4Ji0LBdDMfGtauXt6Ac\naITtPEAEZoHuax6YQju4XAwKAUe3P+jm/F8FCkC/YU+JsYE+7nUlldR9Ho/DRM2j\nFBpae0PpMdM2KG6gHDge80Y6wE8mu2ThtajxWOsNvdhiB5uM18SMrKkCgYEAxaDX\nwW71l6VsbRB608VQgi7FDfY8TUhHXNwPjDSNusnX2rW5Fl/iYZ7vIghudSPEa9zC\nhXsb3sfqmtBydItXi+Y02TLZJn3SQT8MigwQgxj4iO4B26Yr9OaLXPOW5u2rEDaF\nl3s5V2NIOhu0/M5z1anduiKE6qibkZqZtXJTMDcCgYEAiyeIwfSJiJyVWg4g4BRs\nl4bGndt/j1nfuXmu0enQSB4czuMq46iWBdYsqVaVtPyd/BM8GcMVBRhpiQgD89Ew\nGPSUo7ODfjNU/vg0gBP940V+APlCBj+yfWQoxXcoIAt8HbKupOPI8wjB3o1pZ6YX\n7syCm92Imy/Ws3PC6OHkQ9ECgYEAnth9EpjhBZaM48zPLM/3uetlr6cvKN7jnRuz\n03maQXxi5wQRVI6VIungQ3aLcdPh2OCD6U3eRN5jDzRkCpDFOUk7SSi5qVqQWKkY\npwyzaOv1N/o1vBqAUkPL2FZiABMf39Qy5GLC4B6Iu0vx2REHwcDa2vVL6GDFSe79\nhP3zJ1kCgYAhW5G4AcHiRhnFKQeQeidLIoh+ksFQ6tC+Rso1EJ/4pEgSVUk3xTEP\np0vG5GV/yMvAKwz2ON3qW5YhTCRetrQ0ajWs2WRpleyn0Hbybo0RAf3vFa9Jcdef\nUt/jlAI5/lAEgAx9CzlKb4eQRxKOJvPWLpYoNiLtVax1dQ+s33LvrA==\n-----END RSA PRIVATE KEY-----"
         }
     SETTINGS
 }
+*/

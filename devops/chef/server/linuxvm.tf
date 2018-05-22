@@ -16,6 +16,10 @@ variable credential {
     description = "Azure app credential to create resources"
 }
 
+variable chef {
+  type = "map"
+}
+
 provider "azurerm" {
     subscription_id = "${var.credential["subscription_id"]}"
     client_id       = "${var.credential["client_id"]}"
@@ -119,8 +123,8 @@ resource "null_resource" "configure_chef" {
       "sudo dpkg -i /tmp/chef-server-core_12.17.33-1_amd64.deb",
       "sudo chef-server-ctl install chef-manage",
       "sudo chef-server-ctl reconfigure",
-      "sudo chef-server-ctl user-create feliperojas felipe rojas william.rojas@bizagi.com 'Bizagi123*/' --filename ~/auth.pem",
-      "sudo chef-server-ctl org-create bizdevopstest 'bizagi devops test' --association_user feliperojas --filename ~/bizdevopstest.pem",
+      "sudo chef-server-ctl user-create ${var.chef["admin_user"]} ${var.chef["admin_name"]} ${var.chef["admin_sourname"]} ${var.chef["admin_email"]} '${var.chef["admin_password"]}' --filename ~/auth.pem",
+      "sudo chef-server-ctl org-create ${var.chef["org_name"]} '${var.chef["org_description"]}' --association_user ${var.chef["admin_user"]} --filename ~/${var.chef["org_name"]}.pem",
     ]
 
     connection {
