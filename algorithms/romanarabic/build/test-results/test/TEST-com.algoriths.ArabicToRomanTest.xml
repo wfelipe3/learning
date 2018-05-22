@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.algoriths.ArabicToRomanTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2018-05-06T22:11:40" hostname="imac-de-felipe" time="0.137">
+  <properties/>
+  <testcase name="testArabicToRomanNumbers" classname="com.algoriths.ArabicToRomanTest" time="0.111"/>
+  <testcase name="testRomanToArabic" classname="com.algoriths.ArabicToRomanTest" time="0.025"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
