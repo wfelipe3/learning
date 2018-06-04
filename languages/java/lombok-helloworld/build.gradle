@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+    id 'io.franzbecker.gradle-lombok' version '1.14'
+}
+
+group 'com.learning'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+lombok {
+    sha256 = ""
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

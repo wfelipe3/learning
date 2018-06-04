@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.learning.LombokHelloWorldTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2018-06-04T03:22:13" hostname="imac-de-felipe" time="0.006">
+  <properties/>
+  <testcase name="testToString" classname="com.learning.LombokHelloWorldTest" time="0.003"/>
+  <testcase name="valTest" classname="com.learning.LombokHelloWorldTest" time="0.0"/>
+  <testcase name="testGetterSetter" classname="com.learning.LombokHelloWorldTest" time="0.0"/>
+  <testcase name="testEqualsAndHashCode" classname="com.learning.LombokHelloWorldTest" time="0.0"/>
+  <testcase name="testNonNull" classname="com.learning.LombokHelloWorldTest" time="0.0"/>
+  <testcase name="testConstructor" classname="com.learning.LombokHelloWorldTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
