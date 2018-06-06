@@ -1,4 +1,4 @@
-from pyrsistent import pvector, v, pmap, m, pset, s
+from pyrsistent import pvector, v, pmap, m, pset, s, freeze, thaw, PClass, field
 from assertpy import assert_that
 
 def test_pvector():
@@ -36,3 +36,29 @@ def test_pset_add_value():
      animals= pset(['chicken', 'pig', 'cow']) | s('donkey', 'dog')
      assert_that(animals.add('cat')).is_equal_to(s('chicken', 'pig', 'cow', 'donkey', 'dog', 'cat'))
      assert_that(animals.remove('pig')).is_equal_to(s('chicken', 'cow', 'donkey', 'dog'))
+
+def test_pset_remove():
+     animals= pset(['chicken', 'pig', 'cow']) | s('donkey', 'dog')
+     assert_that(animals.remove('pig')).is_equal_to(s('chicken', 'cow', 'donkey', 'dog'))
+
+def test_freeze():
+    d = {'sublist': [{'a', 'b', 'c'}, {'d', 'e', 'f'}] }
+    frozen = freeze(d)
+    assert_that(frozen).is_equal_to(m(sublist=v(s('a', 'b', 'c'), s('d', 'e', 'f'))))
+    assert_that(thaw(frozen)).is_equal_to(d)
+
+class Point(PClass):
+    x = field()
+    y = field()
+
+    def translate(self, x_trans, y_trans):
+        return self.set(x=self.x + x_trans,
+                        y=self.y + y_trans)
+
+def test_pclass():
+    p = Point(x=1, y=2)
+    t = p.translate(1,1)
+    assert_that(p.x).is_equal_to(1)
+    assert_that(p.y).is_equal_to(2)
+    assert_that(t.x).is_equal_to(2)
+    assert_that(t.y).is_equal_to(3)
